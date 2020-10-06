@@ -6,7 +6,7 @@
 #.PHONY: clean mrproper
 CC=g++
 CFLAGS= -Wall -I../include
-LDFLAGS= -L../lib -lmatrices 
+LDFLAGS= -L../lib -lmatrix 
 EXEC=test
 SRC= $(wildcard *.cpp)
 OBJS= $(SRC:.cpp=.o)

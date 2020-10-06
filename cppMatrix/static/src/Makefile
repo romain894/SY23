@@ -6,8 +6,8 @@
 #.PHONY: clean mrproper
 CC=g++
 AR=ar
-CFLAGS= -Wall  -I../include 
-LDFLAGS= 
+CFLAGS= -Wall  -I../include
+LDFLAGS=
 SRC=$(wildcard *.cpp)
 OBJS= $(SRC:.cpp=.o)
 
@@ -15,11 +15,11 @@ all: $(OBJS)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c -o $@ $<
-	
+
 lib:
-	$(AR) -cvq ../lib/libmatrices.a $(OBJS)
-	
+	$(AR) -cvq ../lib/libmatrix.a $(OBJS)
+
 
 clean:
-	rm *.o 
-	rm ../lib/libmatrices.so
+	rm *.o
+	rm ../lib/libmatrix.a #error : so instead of a

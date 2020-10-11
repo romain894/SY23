@@ -5,7 +5,7 @@
 //1st set of functions for integer matrixes
 //The pointer as a parameter needs an address.
 dynArray_i* createArray_i(dynArray_i* ptrArray, size_t x, size_t y){
-  ptrArray->array = (int**)malloc(x*sizeof(int));
+  ptrArray->array = (int**)malloc(x*sizeof(int*));
   ptrArray->x = x;
   ptrArray->y = y;
   for (int i = 0; i < x; i++){
@@ -16,8 +16,8 @@ dynArray_i* createArray_i(dynArray_i* ptrArray, size_t x, size_t y){
 }
 
 //Arrays start at index 0.
-void insertArray_i(dynArray_i* ptrArray, int element, size_t pos_x, size_t pos_y){
-  if (pos_x > ptrArray->x || pos_y > ptrArray->y){
+void insertElement_i(dynArray_i* ptrArray, int element, size_t pos_x, size_t pos_y){
+  if (pos_x >= ptrArray->x || pos_y >= ptrArray->y){
     printf("Out of range.\n");
   }
   else{
@@ -47,7 +47,7 @@ void printArray_i(dynArray_i* ptrArray){
 //2nd set of functions for non defined types
 //The pointer as a parameter needs an address.
 dynArray* createArray(dynArray* ptrArray, size_t x, size_t y){
-  ptrArray->array = (double**)malloc(x*sizeof(double));
+  ptrArray->array = (double**)malloc(x*sizeof(double*));
   ptrArray->x = x;
   ptrArray->y = y;
   for (int i = 0; i < x; i++){
@@ -58,8 +58,8 @@ dynArray* createArray(dynArray* ptrArray, size_t x, size_t y){
 }
 
 //Arrays start at index 0.
-void insertArray(dynArray* ptrArray, double element, size_t pos_x, size_t pos_y){
-  if (pos_x > ptrArray->x || pos_y > ptrArray->y){
+void insertElement(dynArray* ptrArray, double element, size_t pos_x, size_t pos_y){
+  if (pos_x >= ptrArray->x || pos_y >= ptrArray->y){
     printf("Out of range.\n");
   }
   else{
@@ -70,7 +70,6 @@ void insertArray(dynArray* ptrArray, double element, size_t pos_x, size_t pos_y)
 void freeArray(dynArray* ptrArray){
 
   for (int i = 0; i < ptrArray->x; i++){
-
     free(ptrArray->array[i]);
   }
   free(ptrArray->array);
@@ -86,17 +85,17 @@ void printArray(dynArray* ptrArray){
   }
 }
 
-//
+
 // int main(int argc, char const *argv[]) {
 //   dynArray_i ptrArray;
-//   createArray_i(&ptrArray,2,2);
-//   insertArray_i(&ptrArray,1,0,0);
-//   insertArray_i(&ptrArray,2,0,1);
-//   insertArray_i(&ptrArray,3,1,0);
-//   insertArray_i(&ptrArray,4,1,1);
+//   createArray_i(&ptrArray,9,9);
+//   for (int i = 0; i < 9; i++){
+//     for (int j = 0; j < 9; j++){
+//       insertElement_i(&ptrArray,1,i,j);
+//     }
+//   }
 //
 //   printArray_i(&ptrArray);
-//
 //   freeArray_i(&ptrArray);
 //
 //   return 0;

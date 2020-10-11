@@ -6,20 +6,20 @@
 #.PHONY: clean mrproper
 CC=gcc
 CFLAGS= -Wall  -I../include -fPIC -std=gnu99
-LDFLAGS= 
+LDFLAGS=
 SRC=$(wildcard *.c)
 OBJS= $(SRC:.c=.o)
 
 all: $(OBJS)
 
-	
+
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
-	
+
 lib:
 	$(CC) -shared  -o ../lib/libmatrices.so $(OBJS)
-	
+
 
 clean:
-	rm *.o 
+	rm *.o
 	rm ../lib/libmatrices.so

@@ -8,9 +8,9 @@
 
 void generateRandomMatrix(int Rows, int Cols);
 int pRandom(void);
-int** ones(size_t x, size_t y);
-void zeroes(size_t x, size_t y);
-void id(size_t size);
+dynArray_i* ones(size_t x, size_t y);
+dynArray_i* zeroes(size_t x, size_t y);
+dynArray_i* id(size_t size);
 transpose(*ptrArray);
 private:
   int Rows, Cols;

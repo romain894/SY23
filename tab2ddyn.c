@@ -42,6 +42,7 @@ void printArray_i(dynArray_i* ptrArray){
     }
     printf("\n");
   }
+  printf("\n" );
 }
 
 //2nd set of functions for non defined types
@@ -77,26 +78,36 @@ void freeArray(dynArray* ptrArray){
 }
 
 void printArray(dynArray* ptrArray){
-  for (int i = 0; i < ptrArray->x; i++){
-    for (int j = 0; j < ptrArray->y; j++){
+  printf("value x: %ld\n", ptrArray->x);
+  printf("value y: %ld\n", ptrArray->y);
+  for (int i = 0; i < (int)ptrArray->x; i++){
+    for (int j = 0; j < (int)ptrArray->y; j++){
       printf("%f\t", ptrArray->array[i][j]);
     }
     printf("\n");
   }
+  printf("\n");
 }
 
 
 // int main(int argc, char const *argv[]) {
-//   dynArray_i ptrArray;
-//   createArray_i(&ptrArray,9,9);
-//   for (int i = 0; i < 9; i++){
+//   dynArray_i Array;
+//   dynArray_i* ptrArray = createArray_i(&Array,50,9);
+//   for (int i = 0; i < 5; i++){
 //     for (int j = 0; j < 9; j++){
-//       insertElement_i(&ptrArray,1,i,j);
+//       insertElement_i(&Array,1,i,j);
 //     }
 //   }
-//
-//   printArray_i(&ptrArray);
-//   freeArray_i(&ptrArray);
+//   dynArray_i transpose;
+//   dynArray_i* ptrTranspose = createArray_i(&transpose, ptrArray->y, ptrArray->x);
+//   for (int i = 0; i < ptrArray->x; i++){
+//     for (int j = 0; j < ptrArray->y; j++){
+//       insertElement_i(ptrTranspose, ptrArray->array[i][j], j ,i);
+//     }
+//   }
+//   printArray_i(&Array);
+//   printArray_i(&transpose);
+//   freeArray_i(&Array);
 //
 //   return 0;
 // }

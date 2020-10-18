@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cd src
+echo "Cleaning..."
+make clean
+echo "Building object files.."
+make all
+cd ../build 
+make clean
+make all
+./main

@@ -36,23 +36,23 @@ dynArray* zeroes(size_t x, size_t y){
 
 }
 
-dynArray* id(size_t size){
-  dynArray* id = malloc(sizeof(dynArray_i*));
-  id = createArray(id, size, size);
+dynArray* eye(size_t size){
+  dynArray* eye = malloc(sizeof(dynArray_i*));
+  eye = createArray(eye, size, size);
   for (int i = 0; i < size; i++){
     for (int j = 0; j < size; j++){
       if (i == j){
-        insertElement(id, 1, i, j);
+        insertElement(eye, 1, i, j);
       }
       else{
-        insertElement(id, 0, i, j);
+        insertElement(eye, 0, i, j);
       }
-      printf("%f\t", id->array[i][j]);
+      printf("%f\t", eye->array[i][j]);
     }
     printf("\n");
   }
   printf("\n");
-  return(id);
+  return(eye);
 }
 
 //Returns a pointer to the struct containing the randomly generated array
@@ -130,7 +130,9 @@ dynArray* multiplyMatrix(dynArray* mat1, dynArray* mat2){
 }
 
 //Decompose a squared matrix in two matrixes L and U that will need to be freed.
-void decompositionLU(dynArray* mat){
+//Doesn't check for matrix regularity.
+//Return a pointer to an array of pointers pointing to structs containing L and U.
+dynArray** decompositionLU(dynArray* mat){
   printf("Creating L...\n");
   dynArray* L = zeroes(mat->x, mat->x);
   printf("Creating U...\n");
@@ -162,6 +164,48 @@ void decompositionLU(dynArray* mat){
   printArray(U);
   printf("Verification:\n");
   multiplyMatrix(L,U);
+  dynArray** couple = malloc(2*sizeof(dynArray*));
+  *couple = L;
+  *(couple+1) = U;
+  return couple;
+}
+
+dynArray* inverseMatrix(dynArray* mat){
+  dynArray** set = decompositionLU(mat);
+  // printArray(*set);
+  printf("debug: %f\n", (*(set+1))->array[1][2]);
+  // printArray(*(set+1));
+  //Forward elimination, L*b = idMatrix:
+  dynArray* idMatrix = eye(mat->x);
+  dynArray* b = malloc(sizeof(dynArray*));
+  b = createArray(b, mat->x, mat->y);
+
+  for (int i = 0; i < mat->x; i++){
+    b->array[1][i] = idMatrix->array[1][i] / (*set)->array[1][1];
+    for (int k = 1; k < mat->x; k++){
+      double sigma = 0;
+      for (int j = k; j > 0; j--){
+        sigma = sigma + (*set)->array[k][j] * b->array[j][i];
+      }
+      b->array[k][i] = (idMatrix->array[k][i] - sigma)/(*set)->array[k][k];
+    }
+  }
+  //Backwards substitution, U*(A^-1) = b:
+  dynArray* invMat = malloc(sizeof(dynArray*));
+  invMat = createArray(invMat, mat->x, mat->y);
+  for (int i = 0; i < mat->x; i++){
+    invMat->array[mat->x-1][i] = (b->array[mat->x-1][i]) / (*(set+1))->array[mat->x-1][mat->x-1];
+    printf("debug: %f\n", (*(set+1))->array[1][2]);
+    for (int k = mat->x-1; k >= 0; k--){
+      double sigma = 0;
+      for (int j = k; j < mat->x; j++){
+        sigma = sigma + (*(set+1))->array[k][j] * invMat->array[j][i];
+      }
+      invMat->array[k][i] = (b->array[k][i] - sigma)/(*(set+1))->array[k][k];
+    }
+  }
+  printArray(invMat);
+  return invMat;
 }
 
 int main(int argc, char const *argv[]) {
@@ -173,7 +217,7 @@ int main(int argc, char const *argv[]) {
   // dynArray* mat1 = ones(8, 3);
   // printf("\n");
   // dynArray* mat2 = zeroes(6,9);
-  // dynArray* mat3 = id(10);
+  // dynArray* mat3 = eye(10);
   // printf("\n");
   dynArray* transMat = transpose(ptrRdMat);
   printArray(transMat);
@@ -182,10 +226,11 @@ int main(int argc, char const *argv[]) {
   // printf("\n" );
   multiplyMatrix(transMat, ptrRdMat);
   dynArray targetLU;
-  dynArray* target = generateRandomMatrix(&targetLU, 16, 16);
+  dynArray* target = generateRandomMatrix(&targetLU, 3, 3);
   printf("Matrix to decompose: \n");
   printArray(target);
-  decompositionLU(target);
+  printf("Inversion!\n");
+  inverseMatrix(target);
   freeArray(transMat);
   return 0;
 }

@@ -36,6 +36,7 @@ void freeArray_i(dynArray_i* ptrArray){
   printf("Memory freed.\n");
 }
 
+//Print the contents of the array of int pointed to
 void printArray_i(dynArray_i* ptrArray){
   for (int i = 0; i < ptrArray->x; i++){
     for (int j = 0; j < ptrArray->y; j++){
@@ -77,12 +78,19 @@ void freeArray(dynArray* ptrArray){
   }
   free(ptrArray->array);
   printf("Array freed.\n");
-  free(ptrArray); 
+  free(ptrArray);
   printf("Pointer freed.\n");
 }
 
-void printArray(dynArray* ptrArray){
+//Free the couple of arrays, specifically used for LU sets.
+void freeCouple(dynArray** set){
+  freeArray(*set);
+  freeArray(*(set+1));
+  freeArray(set);
+}
 
+//Print the contents of the array of doubles pointed to
+void printArray(dynArray* ptrArray){
   for (int i = 0; i < (int)ptrArray->x; i++){
     for (int j = 0; j < (int)ptrArray->y; j++){
       printf("%f\t", ptrArray->array[i][j]);

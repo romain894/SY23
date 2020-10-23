@@ -1,5 +1,5 @@
 #ifndef MATRICE_H
-#define MATRICE_H 
+#define MATRICE_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -16,5 +16,5 @@ dynArray* addMatrix(dynArray* mat1, dynArray* mat2);
 dynArray* transpose(dynArray* mat);
 dynArray* multiplyMatrix(dynArray* mat1, dynArray* mat2);
 dynArray* subMatrix(dynArray* mat1, dynArray* mat2);
-void decompositionLU(dynArray* mat);
+dynArray** decompositionLU(dynArray* mat);
 #endif

@@ -47,9 +47,7 @@ dynArray* eye(size_t size){
       else{
         insertElement(eye, 0, i, j);
       }
-      printf("%f\t", eye->array[i][j]);
     }
-    printf("\n");
   }
   printf("\n");
   return(eye);
@@ -95,7 +93,7 @@ dynArray* addMatrix(dynArray* mat1, dynArray* mat2){
 
 //Takes the matrix in 1st argument, substract to the matrix
 //in the 2nd argument if same dimensions.
-//Returns the pointer to the struct containing the result 
+//Returns the pointer to the struct containing the result
 dynArray* subMatrix(dynArray* mat1, dynArray* mat2){
   dynArray* result = malloc(sizeof(dynArray*));
   result = createArray(result, mat1->x, mat1->y);
@@ -170,18 +168,18 @@ dynArray** decompositionLU(dynArray* mat){
   return couple;
 }
 
+//Inverse the matrix following the LU decomposition
 dynArray* inverseMatrix(dynArray* mat){
   dynArray** set = decompositionLU(mat);
-  // printArray(*set);
-  printf("debug: %f\n", (*(set+1))->array[1][2]);
-  // printArray(*(set+1));
   //Forward elimination, L*b = idMatrix:
   dynArray* idMatrix = eye(mat->x);
   dynArray* b = malloc(sizeof(dynArray*));
   b = createArray(b, mat->x, mat->y);
 
   for (int i = 0; i < mat->x; i++){
-    b->array[1][i] = idMatrix->array[1][i] / (*set)->array[1][1];
+    b->array[0][i] = idMatrix->array[0][i] / (*set)->array[0][0];
+    printf("B matrix: \n" );
+    printArray(b);
     for (int k = 1; k < mat->x; k++){
       double sigma = 0;
       for (int j = k; j > 0; j--){
@@ -195,7 +193,6 @@ dynArray* inverseMatrix(dynArray* mat){
   invMat = createArray(invMat, mat->x, mat->y);
   for (int i = 0; i < mat->x; i++){
     invMat->array[mat->x-1][i] = (b->array[mat->x-1][i]) / (*(set+1))->array[mat->x-1][mat->x-1];
-    printf("debug: %f\n", (*(set+1))->array[1][2]);
     for (int k = mat->x-1; k >= 0; k--){
       double sigma = 0;
       for (int j = k; j < mat->x; j++){
@@ -204,7 +201,6 @@ dynArray* inverseMatrix(dynArray* mat){
       invMat->array[k][i] = (b->array[k][i] - sigma)/(*(set+1))->array[k][k];
     }
   }
-  printArray(invMat);
   return invMat;
 }
 

@@ -1,5 +1,5 @@
 #ifndef TAB2DDYN_H
-#define TAB2DDYN_H 
+#define TAB2DDYN_H
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -29,4 +29,5 @@ void insertElement(dynArray* ptrArray, double element, size_t pos_x, size_t pos_
 void freeArray(dynArray* ptrArray);
 void printArray(dynArray* ptrArray);
 
+void freeCouple(dynArray** set);
 #endif

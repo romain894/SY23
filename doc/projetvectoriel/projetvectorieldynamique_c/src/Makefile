@@ -6,16 +6,19 @@
 #.PHONY: clean mrproper
 CC=gcc
 CFLAGS= -Wall  -I../include -fPIC -std=gnu99
+LDFLAGS=
 SRC=$(wildcard *.c)
 OBJS= $(SRC:.c=.o)
+
 all: $(OBJS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 lib:
-	$(CC) -shared  -o ../lib/libmatrices.so $(OBJS)
+	$(CC) -shared  -o ../lib/libvectoriel.so $(OBJS)
+
 
 clean:
 	rm *.o
-	rm ../lib/libmatrices.so
+	rm ../lib/libvectoriel.so

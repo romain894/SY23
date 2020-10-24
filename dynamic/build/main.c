@@ -5,22 +5,57 @@
 #include "../include/matrice.h"
 
 int main(int argc, char const *argv[]) {
-  //srand(time(NULL));
+  //Initializing random seed
+  srand(time(NULL));
+
+  //Creation of a randomly generated arrays.
   dynArray rdMatrix;
-  dynArray* ptrRdMat = generateRandomMatrix(&rdMatrix, 11, 7);
+  dynArray* ptrRdMat = generateRandomMatrix(&rdMatrix, 4, 3);
   printf("\n");
   printArray(ptrRdMat);
-  // dynArray_i* mat1 = ones(8, 3);
-  // printf("\n");
-  // dynArray_i* mat2 = zeroes(6,9);
-  // dynArray_i* mat3 = id(10);
-  // printf("\n");
+
+  //Creation of ones, zeroes arrays and identity matrixes.
+  dynArray* mat1 = ones(3,2);
+  printArray(mat1);
+  printf("\n");
+  dynArray* mat2 = zeroes(4,6);
+  printf("\n");
+  printArray(mat2);
+  dynArray* mat3 = eye(5);
+  printf("\n");
+  printArray(mat3);
+
+  //Transposition with the randomly generated array beforehand.
   dynArray* transMat = transpose(ptrRdMat);
   printArray(transMat);
   printf("\n");
-  // addMatrix(transMat, ptrRdMat);
-  // printf("\n" );
-  multiplyMatrix(transMat, ptrRdMat);
+
+  //Add the transposed random array to the original array.
+  dynArray* addedMat = addMatrix(transMat, ptrRdMat);
+  printArray(addedMat);
+
+  //LU decomposition of the randomly generated matrix targetLU
+  dynArray targetLU;
+  dynArray* target = generateRandomMatrix(&targetLU, 3, 3);
+  printf("Matrix to decompose: \n");
+  printArray(target);
+  dynArray** set = decompositionLU(target);
+
+  //Making sure that the LU decomposition worked:
+  multiplyMatrix(*(set),*(set+1));
+
+  //Inverting the target matrix
+  dynArray* invTarget = inverseMatrix(target);
+  printArray(invTarget);
+
+  //Freeing all used arrays
+  //freeArray(ptrRdMat);
+  freeArray(mat1);
+  freeArray(mat2);
+  freeArray(mat3);
   freeArray(transMat);
+  freeArray(addedMat);
+  freeArray(invTarget);
+  //freeCouple(set);
   return 0;
 }

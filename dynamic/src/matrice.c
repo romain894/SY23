@@ -5,25 +5,27 @@
 #include "../include/matrice.h"
 
 //never return a pointer to a local variable!
+
+
+//Return a random number between  and 1
 double pRandom(void){
   return (double)rand()/(double)RAND_MAX  ;
 }
 
+//Return an array filled with 1 of the precised (x,y) parameters
 dynArray* ones(size_t x, size_t y){
   dynArray* ones = malloc(sizeof(dynArray_i*));
   ones = createArray(ones, x, y);
   for (int i = 0; i < x; i++){
     for (int j = 0; j < y; j++){
       insertElement(ones, 1, i, j);
-      printf("%f\t", ones->array[i][j]);
     }
-    printf("\n");
   }
-  printf("\n");
   return(ones);
 
 }
 
+//Return an array of zeroes with the (x,y) parameters
 dynArray* zeroes(size_t x, size_t y){
   dynArray* zeroes = malloc(sizeof(dynArray_i*));
   zeroes = createArray(zeroes, x, y);
@@ -36,6 +38,7 @@ dynArray* zeroes(size_t x, size_t y){
 
 }
 
+//Return the identity matrix of the "size" parameter
 dynArray* eye(size_t size){
   dynArray* eye = malloc(sizeof(dynArray_i*));
   eye = createArray(eye, size, size);
@@ -160,8 +163,6 @@ dynArray** decompositionLU(dynArray* mat){
   printArray(L);
   printf("Matrix U:\n");
   printArray(U);
-  printf("Verification:\n");
-  multiplyMatrix(L,U);
   dynArray** couple = malloc(2*sizeof(dynArray*));
   *couple = L;
   *(couple+1) = U;
@@ -169,6 +170,8 @@ dynArray** decompositionLU(dynArray* mat){
 }
 
 //Inverse the matrix following the LU decomposition
+//Matrix has to be square AND invertible.
+//This method doesn't check of inversibility.
 dynArray* inverseMatrix(dynArray* mat){
   dynArray** set = decompositionLU(mat);
   //Forward elimination, L*b = idMatrix:
@@ -178,8 +181,6 @@ dynArray* inverseMatrix(dynArray* mat){
 
   for (int i = 0; i < mat->x; i++){
     b->array[0][i] = idMatrix->array[0][i] / (*set)->array[0][0];
-    printf("B matrix: \n" );
-    printArray(b);
     for (int k = 1; k < mat->x; k++){
       double sigma = 0;
       for (int j = k; j > 0; j--){
@@ -202,31 +203,4 @@ dynArray* inverseMatrix(dynArray* mat){
     }
   }
   return invMat;
-}
-
-int main(int argc, char const *argv[]) {
-  srand(time(NULL));
-  dynArray rdMatrix;
-  dynArray* ptrRdMat = generateRandomMatrix(&rdMatrix, 11, 7);
-  printf("\n");
-  printArray(ptrRdMat);
-  // dynArray* mat1 = ones(8, 3);
-  // printf("\n");
-  // dynArray* mat2 = zeroes(6,9);
-  // dynArray* mat3 = eye(10);
-  // printf("\n");
-  dynArray* transMat = transpose(ptrRdMat);
-  printArray(transMat);
-  printf("\n");
-  // addMatrix(transMat, ptrRdMat);
-  // printf("\n" );
-  multiplyMatrix(transMat, ptrRdMat);
-  dynArray targetLU;
-  dynArray* target = generateRandomMatrix(&targetLU, 3, 3);
-  printf("Matrix to decompose: \n");
-  printArray(target);
-  printf("Inversion!\n");
-  inverseMatrix(target);
-  freeArray(transMat);
-  return 0;
 }

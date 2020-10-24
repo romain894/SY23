@@ -5,17 +5,17 @@
 #$* 	Le nom du fichier sans suffixe
 #.PHONY: clean mrproper
 CC=gcc
-CFLAGS= -Wall  -I../include -fPIC -std=gnu99
-SRC=$(wildcard *.c)
+CFLAGS= -Wall -I../include
+LDFLAGS= -L../lib -lvectoriel
+EXEC=test
+SRC= $(wildcard *.c)
 OBJS= $(SRC:.c=.o)
+
 all: $(OBJS)
+	$(CC) -o $(EXEC) $^ $(LDFLAGS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $^
-
-lib:
-	$(CC) -shared  -o ../lib/libmatrices.so $(OBJS)
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm *.o
-	rm ../lib/libmatrices.so
+	rm *.o $(EXEC)

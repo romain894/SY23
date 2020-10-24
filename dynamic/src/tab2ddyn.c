@@ -25,7 +25,7 @@ void insertElement_i(dynArray_i* ptrArray, int element, size_t pos_x, size_t pos
   }
 }
 
-//Free the array
+//Free the array of of pointers pointed to by ptrArray. Also frees the ptrArray
 void freeArray_i(dynArray_i* ptrArray){
 
   for (int i = 0; i < ptrArray->x; i++){
@@ -36,7 +36,7 @@ void freeArray_i(dynArray_i* ptrArray){
   printf("Memory freed.\n");
 }
 
-//Print the contents of the array of int pointed to
+//Print the contents of the array of int pointed to by ptrArray
 void printArray_i(dynArray_i* ptrArray){
   for (int i = 0; i < ptrArray->x; i++){
     for (int j = 0; j < ptrArray->y; j++){
@@ -48,7 +48,7 @@ void printArray_i(dynArray_i* ptrArray){
 }
 
 //2nd set of functions for double type
-//The pointer as a parameter needs an address. Create and allocate memory for an array inside a struct
+//Allocate memory for an array of size (x,y) inside a struct pointed to by ptrArray
 dynArray* createArray(dynArray* ptrArray, size_t x, size_t y){
   ptrArray->array = (double**)malloc(x*sizeof(double*));
   ptrArray->x = x;
@@ -82,14 +82,14 @@ void freeArray(dynArray* ptrArray){
   printf("Pointer freed.\n");
 }
 
-//Free the couple of arrays, specifically used for LU sets.
+//Free the couple of pointers, specifically used for LU sets.
 void freeCouple(dynArray** set){
   freeArray(*set);
   freeArray(*(set+1));
-  freeArray(set);
+  free(set);
 }
 
-//Print the contents of the array of doubles pointed to
+//Print the contents of the array of doubles pointed to by ptrArray
 void printArray(dynArray* ptrArray){
   for (int i = 0; i < (int)ptrArray->x; i++){
     for (int j = 0; j < (int)ptrArray->y; j++){
@@ -99,26 +99,3 @@ void printArray(dynArray* ptrArray){
   }
   printf("\n");
 }
-
-
-// int main(int argc, char const *argv[]) {
-//   dynArray_i Array;
-//   dynArray_i* ptrArray = createArray_i(&Array,50,9);
-//   for (int i = 0; i < 5; i++){
-//     for (int j = 0; j < 9; j++){
-//       insertElement_i(&Array,1,i,j);
-//     }
-//   }
-//   dynArray_i transpose;
-//   dynArray_i* ptrTranspose = createArray_i(&transpose, ptrArray->y, ptrArray->x);
-//   for (int i = 0; i < ptrArray->x; i++){
-//     for (int j = 0; j < ptrArray->y; j++){
-//       insertElement_i(ptrTranspose, ptrArray->array[i][j], j ,i);
-//     }
-//   }
-//   printArray_i(&Array);
-//   printArray_i(&transpose);
-//   freeArray_i(&Array);
-//
-//   return 0;
-// }

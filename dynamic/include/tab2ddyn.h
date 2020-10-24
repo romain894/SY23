@@ -3,14 +3,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//Struc for integer type
+//Structure for integer type arrays
 typedef struct{
   int** array;
   size_t x;
   size_t y;
 } dynArray_i;
 
-//struct for double type
+//Structure for double type arrays
 typedef struct{
   double** array;
   size_t x;
@@ -18,16 +18,28 @@ typedef struct{
 } dynArray;
 
 
+//1st set of functions for integer arrays
 
+//Allocate memory for an array of size (x,y) inside a struct pointed to by ptrArray
 dynArray_i* createArray_i(dynArray_i* ptrArray, size_t x, size_t y);
+//Insert an element in an previously created array at (x,y) position pointed to by ptrArray
 void insertElement_i(dynArray_i* ptrArray, int element, size_t pos_x, size_t pos_y);
+//Free the array of of pointers pointed to by ptrArray. Also frees the ptrArray
 void freeArray_i(dynArray_i* ptrArray);
+//Print the contents of the array of int pointed to by ptrArray
 void printArray_i(dynArray_i* ptrArray);
 
-dynArray* createArray(dynArray* ptrArray, size_t x, size_t y);
-void insertElement(dynArray* ptrArray, double element, size_t pos_x, size_t pos_y);
-void freeArray(dynArray* ptrArray);
-void printArray(dynArray* ptrArray);
+//2nd set of functions for double type arrays. Most common set used.
 
+//Allocate memory for an array of size (x,y) inside a struct pointed to by ptrArray
+dynArray* createArray(dynArray* ptrArray, size_t x, size_t y);
+//Insert an element in an previously created array at (x,y) position pointed to by ptrArray
+void insertElement(dynArray* ptrArray, double element, size_t pos_x, size_t pos_y);
+//Free the array of of pointers pointed to by ptrArray. Also frees the ptrArray
+void freeArray(dynArray* ptrArray);
+//Print the contents of the array of double pointed to by ptrArray
+void printArray(dynArray* ptrArray);
+//Free the couple of pointers contained inside set.
+//Exclusively used for freeing LU matrixes.
 void freeCouple(dynArray** set);
 #endif

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd src
+echo "Cleaning files"
+make clean
+make all
+make lib
+echo "Created .o and .so files"
+cd ..
+cd build
+make all
+./main

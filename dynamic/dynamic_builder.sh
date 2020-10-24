@@ -9,4 +9,5 @@ echo "Created .o and .so files"
 cd ..
 cd build
 make all
+export LD_LIBRARY_PATH=../lib
 ./main

@@ -4,7 +4,7 @@
 #include "../include/tab2ddyn.h"
 #include "../include/matrice.h"
 
-//never return a pointer to a local variable without allocating moemory to it !
+//never return a pointer to a local variable!
 
 
 //Return a random number between  and 1
@@ -111,8 +111,8 @@ dynArray* subMatrix(dynArray* mat1, dynArray* mat2){
   return result;
 }
 
-//Multiply 2 arrays. Must be of correct dimensions or segfaults will happen.
-//Takes 2 pointers to structs and returns a pointer to struct.
+//Multiply 2 matrixes. Must be of correct dimensions or segfaults will happen.
+//Takes 2 pointers to structs and return a pointer to struct.
 dynArray* multiplyMatrix(dynArray* mat1, dynArray* mat2){
   dynArray* result = malloc(sizeof(dynArray*));
   result = createArray(result, mat1->x, mat2->y);
@@ -172,7 +172,7 @@ dynArray** decompositionLU(dynArray* mat){
 
 //Inverse the matrix following the LU decomposition
 //Matrix has to be square AND invertible.
-//This method doesn't check for inversibility.
+//This method doesn't check of inversibility.
 dynArray* inverseMatrix(dynArray* mat){
   dynArray** set = decompositionLU(mat);
   //Forward elimination, L*b = idMatrix:
@@ -184,18 +184,22 @@ dynArray* inverseMatrix(dynArray* mat){
     b->array[0][i] = idMatrix->array[0][i] / (*set)->array[0][0];
     for (int k = 1; k < mat->x; k++){
       double sigma = 0;
-      for (int j = k; j > 0; j--){
+      for (int j = k; j >= 0; j--){
         sigma = sigma + (*set)->array[k][j] * b->array[j][i];
       }
       b->array[k][i] = (idMatrix->array[k][i] - sigma)/(*set)->array[k][k];
     }
   }
+  printf("Verifying forward elimination:\n");
+  multiplyMatrix((*set),b);
+  printf("B matrix:\n");
+  printArray(b);
   //Backwards substitution, U*(A^-1) = b:
   dynArray* invMat = malloc(sizeof(dynArray*));
   invMat = createArray(invMat, mat->x, mat->y);
   for (int i = 0; i < mat->x; i++){
     invMat->array[mat->x-1][i] = (b->array[mat->x-1][i]) / (*(set+1))->array[mat->x-1][mat->x-1];
-    for (int k = mat->x-1; k >= 0; k--){
+    for (int k = mat->x-2; k >= 0; k--){
       double sigma = 0;
       for (int j = k; j < mat->x; j++){
         sigma = sigma + (*(set+1))->array[k][j] * invMat->array[j][i];

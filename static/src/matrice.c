@@ -184,18 +184,22 @@ dynArray* inverseMatrix(dynArray* mat){
     b->array[0][i] = idMatrix->array[0][i] / (*set)->array[0][0];
     for (int k = 1; k < mat->x; k++){
       double sigma = 0;
-      for (int j = k; j > 0; j--){
+      for (int j = k; j >= 0; j--){
         sigma = sigma + (*set)->array[k][j] * b->array[j][i];
       }
       b->array[k][i] = (idMatrix->array[k][i] - sigma)/(*set)->array[k][k];
     }
   }
+  printf("Verifying forward elimination:\n");
+  multiplyMatrix((*set),b);
+  printf("B matrix:\n");
+  printArray(b);
   //Backwards substitution, U*(A^-1) = b:
   dynArray* invMat = malloc(sizeof(dynArray*));
   invMat = createArray(invMat, mat->x, mat->y);
   for (int i = 0; i < mat->x; i++){
     invMat->array[mat->x-1][i] = (b->array[mat->x-1][i]) / (*(set+1))->array[mat->x-1][mat->x-1];
-    for (int k = mat->x-1; k >= 0; k--){
+    for (int k = mat->x-2; k >= 0; k--){
       double sigma = 0;
       for (int j = k; j < mat->x; j++){
         sigma = sigma + (*(set+1))->array[k][j] * invMat->array[j][i];

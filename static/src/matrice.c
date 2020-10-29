@@ -4,7 +4,7 @@
 #include "../include/tab2ddyn.h"
 #include "../include/matrice.h"
 
-//never return a pointer to a local variable without allocating moemory to it !
+//never return a pointer to a local variable!
 
 
 //Return a random number between  and 1
@@ -111,8 +111,8 @@ dynArray* subMatrix(dynArray* mat1, dynArray* mat2){
   return result;
 }
 
-//Multiply 2 arrays. Must be of correct dimensions or segfaults will happen.
-//Takes 2 pointers to structs and returns a pointer to struct.
+//Multiply 2 matrixes. Must be of correct dimensions or segfaults will happen.
+//Takes 2 pointers to structs and return a pointer to struct.
 dynArray* multiplyMatrix(dynArray* mat1, dynArray* mat2){
   dynArray* result = malloc(sizeof(dynArray*));
   result = createArray(result, mat1->x, mat2->y);
@@ -172,7 +172,7 @@ dynArray** decompositionLU(dynArray* mat){
 
 //Inverse the matrix following the LU decomposition
 //Matrix has to be square AND invertible.
-//This method doesn't check for inversibility.
+//This method doesn't check of inversibility.
 dynArray* inverseMatrix(dynArray* mat){
   dynArray** set = decompositionLU(mat);
   //Forward elimination, L*b = idMatrix:

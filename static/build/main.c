@@ -34,7 +34,7 @@ int main(int argc, char const *argv[]) {
   printArray(addedMat);
 
   //LU decomposition of the randomly generated matrix targetLU
-  dynArray* target = generateRandomMatrix(3, 3);
+  dynArray* target = generateRandomMatrix(5, 5);
   printf("Matrix to decompose: \n");
   printArray(target);
   dynArray** set = decompositionLU(target);

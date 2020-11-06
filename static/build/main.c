@@ -40,11 +40,12 @@ int main(int argc, char const *argv[]) {
   dynArray** set = decompositionLU(target);
 
   //Making sure that the LU decomposition worked:
-  printf("Verifying...\n");
+  printf("Verifying LU decomposition...\n");
   multiplyMatrix(*(set),*(set+1));
 
   //Inverting the target matrix
   dynArray* invTarget = inverseMatrix(target);
+  printf("Inverted matrix:\n");
   printArray(invTarget);
   multiplyMatrix(target, invTarget);
 

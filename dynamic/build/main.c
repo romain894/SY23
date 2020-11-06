@@ -34,17 +34,18 @@ int main(int argc, char const *argv[]) {
   printArray(addedMat);
 
   //LU decomposition of the randomly generated matrix targetLU
-  dynArray* target = generateRandomMatrix(3, 3);
+  dynArray* target = generateRandomMatrix(5, 5);
   printf("Matrix to decompose: \n");
   printArray(target);
   dynArray** set = decompositionLU(target);
 
   //Making sure that the LU decomposition worked:
-  printf("Verifying...\n");
+  printf("Verifying LU decomposition...\n");
   multiplyMatrix(*(set),*(set+1));
 
   //Inverting the target matrix
   dynArray* invTarget = inverseMatrix(target);
+  printf("Inverted matrix:\n");
   printArray(invTarget);
   multiplyMatrix(target, invTarget);
 

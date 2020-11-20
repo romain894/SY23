@@ -8,19 +8,19 @@ CC=gcc
 AR=ar
 #CFLAGS= -Wall  -I../include -fPIC -std=gnu99
 CFLAGS= -Wall -I../include -std=gnu99
-LDFLAGS= 
+LDFLAGS=
 SRC=$(wildcard *.c)
 OBJS= $(SRC:.c=.o)
 
 all: $(OBJS)
 
-	
+
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
-	
+	$(CC) $(CFLAGS) -c -o $@ $^
+
 lib:
 	$(AR) -cvq ../lib/libmatrices.a $(OBJS)
 
 clean:
-	rm *.o 
+	rm *.o
 	rm ../lib/libmatrices.a

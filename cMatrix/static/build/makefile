@@ -6,8 +6,8 @@
 #.PHONY: clean mrproper
 CC=gcc
 CFLAGS= -Wall -I../include
-LDFLAGS= -L../lib -lmatrices 
-EXEC=test
+LDFLAGS= -L../lib -lmatrices
+EXEC=main
 SRC= $(wildcard *.c)
 OBJS= $(SRC:.c=.o)
 
@@ -15,7 +15,7 @@ all: $(OBJS)
 	$(CC) -o $(EXEC) $^ $(LDFLAGS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $^
 
 clean:
 	rm *.o $(EXEC)

@@ -4,18 +4,20 @@
 #$? 	La liste des dépendances plus récentes que la cible
 #$* 	Le nom du fichier sans suffixe
 #.PHONY: clean mrproper
+
 CC=gcc
 CFLAGS= -Wall -I../include
-LDFLAGS= -L../lib -lmatrices 
-EXEC=test
+LDFLAGS= -L../lib -lmatrices
+EXEC=main
 SRC= $(wildcard *.c)
 OBJS= $(SRC:.c=.o)
+export LD_LIBRARY_PATH=../lib
 
 all: $(OBJS)
 	$(CC) -o $(EXEC) $^ $(LDFLAGS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $^
 
 clean:
 	rm *.o $(EXEC)

@@ -88,7 +88,6 @@ dynArray* addMatrix(dynArray* mat1, dynArray* mat2){
   for (int i = 0; i < mat1->x; i++){
     for (int j = 0; j < mat1->y; j++){
       insertElement(result, mat1->array[i][j] + mat2->array[i][j], i, j);
-      printf("%f\t", result->array[i][j] );
     }
     printf("\n" );
   }
@@ -104,9 +103,7 @@ dynArray* subMatrix(dynArray* mat1, dynArray* mat2){
   for (int i = 0; i < mat1->x; i++){
     for (int j = 0; j < mat1->y; j++){
       insertElement(result, mat1->array[i][j] - mat2->array[i][j], i, j);
-      printf("%f\t", result->array[i][j] );
     }
-    printf("\n" );
   }
   return result;
 }
@@ -124,9 +121,7 @@ dynArray* multiplyMatrix(dynArray* mat1, dynArray* mat2){
       }
       insertElement(result, tmp, i, j);
       tmp = 0;
-      printf("%f\t", result->array[i][j]);
     }
-    printf("\n");
   }
   return result;
 }

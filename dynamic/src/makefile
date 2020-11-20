@@ -9,12 +9,16 @@ CFLAGS= -Wall  -I../include -fPIC -std=gnu99
 SRC=$(wildcard *.c)
 OBJS= $(SRC:.c=.o)
 all: $(OBJS)
+export LD_LIBRARY_PATH=../lib
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 lib:
 	$(CC) -shared  -o ../lib/libmatrices.so $(OBJS)
+
+shared-lib:
+	    $(CC) -shared -o ../lib/libmatrice.so $(OBJS)
 
 clean:
 	rm *.o

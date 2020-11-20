@@ -50,11 +50,11 @@ void printArray_i(dynArray_i* ptrArray){
 //2nd set of functions for double type
 //Allocate memory for an array of size (x,y) inside a struct pointed to by ptrArray
 dynArray* createArray(dynArray* ptrArray, size_t x, size_t y){
-  ptrArray->array = (double**)malloc(x*sizeof(double*));
+  ptrArray->array = (double**)malloc(x * sizeof(double*));
   ptrArray->x = x;
   ptrArray->y = y;
   for (int i = 0; i < x; i++){
-    ptrArray->array[i] = (double*)malloc(y*sizeof(double));
+    ptrArray->array[i] = (double*)malloc(y * sizeof(double));
   }
   //printf("Array completed, matrix %ld x %ld\n", ptrArray->x, ptrArray->y );
   return (ptrArray);
@@ -72,12 +72,14 @@ void insertElement(dynArray* ptrArray, double element, size_t pos_x, size_t pos_
 
 //Free the array inside the struct, then frees the pointer to the struct
 void freeArray(dynArray* ptrArray){
-
+  //Free the pointer to the vector of doubles
   for (int i = 0; i < ptrArray->x; i++){
     free(ptrArray->array[i]);
   }
+  //free the double pointer
   free(ptrArray->array);
   printf("Array freed.\n");
+  //Free the pointer to the struct
   free(ptrArray);
   printf("Pointer freed.\n");
 }

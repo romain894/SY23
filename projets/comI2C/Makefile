@@ -4,20 +4,27 @@
 #$? 	La liste des dépendances plus récentes que la cible
 #$* 	Le nom du fichier sans suffixe
 #.PHONY: clean mrproper
-
-CC=gcc
-CFLAGS= -Wall -I../include
-LDFLAGS= -L../lib -lmatrices
-EXEC=main
+CC=g++
+CFLAGS= -Wall -I../../include
+LDFLAGS= -L../../lib -larduino 
+EXEC=comI2C
 SRC= $(wildcard *.c)
 OBJS= $(SRC:.c=.o)
-export LD_LIBRARY_PATH=../lib
 
 all: $(OBJS)
 	$(CC) -o $(EXEC) $^ $(LDFLAGS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CC) $(CFLAGS) -c -o $@ $<
+	
+run: reset
+	./$(EXEC)
 
-clean:
+reset:
+	../../sbin/resetgpios
+
+kill:
+	../../sbin/killapp $(EXEC)
+
+clean: reset
 	rm *.o $(EXEC)

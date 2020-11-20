@@ -7,36 +7,38 @@ using namespace std;
 
 /*********** CONSTRUCTOR **************/
 
-Matrix::Matrix(size_t rowNb, size_t colNb)
+Matrix::Matrix(size_t rowNb, size_t colNb) : nRow(rowNb), nCol(colNb)
 {
-	createCol(colNb);
-	createRow(rowNb, colNb);
-  nRow = rowNb;
-  nCol = colNb;
+	//allocation dynamique d'un tableau de pointeurs de reels
+	array = (double **)new double*[nRow];
+
+	//initialisation a NULL des valeurs du tableau de pointeur
+	for (size_t i = 0; i < nRow; i++) {
+		array[i] = NULL;
+	}
+
+	//allocation dynamique d'un tableau de reels pour chaque
+	//element du tableau de pointeur *tab
+	for (size_t i = 0; i < nRow; i++) {
+		array[i] = (double *)new double[nCol];
+	}
+}
+
+/*********** DESTRUCTOR ***************/
+
+Matrix::~Matrix()
+{
+	for (size_t i = 0; i < nRow; i++) {
+		delete array[i];
+	}
+
+	delete array;
+	#ifdef DEBUG
+  	printf("Matrix : memory freed\n");
+  #endif
 }
 
 /*************** PRIVATE ***************/
-
-void Matrix::createCol(size_t colNb)
-{
-	//allocation dynamique d'un tableau de pointeurs de reels
-	array = (double **)new double*[colNb];
-
-	//initialisation a NULL des valeurs du tableau de pointeur
-	for (size_t i = 0; i < colNb; i++) {
-		array[i] = NULL;
-	}
-}
-
-void Matrix::createRow(size_t rowNb, size_t colNb)
-{
-	//allocation dynamique d'un tableau de reels pour chaque
-	//element du tableau de pointeur *tab
-	for (uint i = 0; i < rowNb; i++) {
-		array[i] = (double *)new double[rowNb];
-	}
-}
-
 
 double Matrix::pRandom(void)
 {
@@ -45,95 +47,174 @@ double Matrix::pRandom(void)
 
 /**************** PUBLIC ***************/
 
-size_t Matrix::getNRow()
+void Matrix::print()
 {
-	return nRow;
-}
-
-size_t Matrix::getNCol()
-{
-	return nCol;
+  // #ifdef DEBUG
+  printf("Print matrix :\n");
+  // #endif
+  for (size_t i = 0; i < nRow; i++){
+    for (size_t j = 0; j < nCol; j++){
+      // #ifdef DEBUG
+      printf("%f\t", array[i][j]);
+      // #endif
+    }
+    // #ifdef DEBUG
+    printf("\n");
+    // #endif
+  }
 }
 
 void Matrix::generateRandomMatrix()
 {
   #ifdef DEBUG
-  printf("generate random matrix :\n");
+  	printf("generate random matrix :\n");
   #endif
   for (size_t i = 0; i < nRow; i++){
     for (size_t j = 0; j < nCol; j++){
       array[i][j] = pRandom();
       #ifdef DEBUG
-      printf("%f\t", array[i][j]);
+      	printf("%f\t", array[i][j]);
       #endif
     }
     #ifdef DEBUG
-    printf("\n");
+    	printf("\n");
     #endif
   }
 }
 
-void Matrix::add(Matrix *array1, Matrix *array2)
+Matrix Matrix::operator + (const Matrix& array2)
 {
   #ifdef DEBUG
-  printf("\nadd 2 matrix :\n");
+  	printf("\nadd 2 matrix :\n");
   #endif
+	Matrix MatrixM(nRow, nCol);
   for (size_t i = 0; i < nRow; i++) {
     for (size_t j = 0; j < nCol; j++) {
-      array[i][j] = array1->array[i][j] + array2->array[i][j];
+      MatrixM.array[i][j] = this->array[i][j] + array2.array[i][j];
       #ifdef DEBUG
-      printf("%f\t", array[i][j]);
+      	printf("%f\t", MatrixM.array[i][j]);
       #endif
     }
     #ifdef DEBUG
-    printf("\n");
+    	printf("\n");
     #endif
   }
+	return MatrixM;
 }
 
-void Matrix::sub(Matrix *array1, Matrix *array2)
+Matrix Matrix::operator - (const Matrix& array2)
 {
   #ifdef DEBUG
-  printf("\nsubtract 2 matrix :\n");
+  	printf("\nsubstract 2 matrix :\n");
   #endif
+	Matrix MatrixM(nRow, nCol);
   for (size_t i = 0; i < nRow; i++) {
     for (size_t j = 0; j < nCol; j++) {
-      array[i][j] = array1->array[i][j] - array2->array[i][j];
+      MatrixM.array[i][j] = this->array[i][j] - array2.array[i][j];
       #ifdef DEBUG
-      printf("%f\t", array[i][j]);
+      	printf("%f\t", MatrixM.array[i][j]);
       #endif
     }
     #ifdef DEBUG
-    printf("\n");
+    	printf("\n");
     #endif
   }
+	return MatrixM;
 }
 
-void Matrix::mul(Matrix *array1, Matrix *array2)
+
+Matrix Matrix::operator * (const Matrix& array2)
 {
   #ifdef DEBUG
-  printf("\nmultiply 2 matrix :\n");
+	  printf("\nmultiply 2 matrix :\n");
+		cout << "row = " << this->nRow << " col = " << array2.nCol << endl;
   #endif
 	#ifdef OPTIONNAL_CHECKS
-  printf("Check matrix sizes...\n");
-	if ((array1->getNCol() != array2->getNRow()) || (array->getNCol() != array2->getNCol()) || (array->getNRow() != array1->getNRow()))
-	{
-		printf("\nCheck matrix sizes...\n");
-	}
+	  printf("Check matrix size...\n");
+		if (this->nCol != array2.nRow)
+		{
+			printf("\nERROR WITH MATRIX SIZE !\n\n");
+		}
+		else {
+			printf("Matrix size OK\n");
+		}
   #endif
-	size_t tmpArray1NCol = array1->getNCol();
-  for (size_t i = 0; i < nRow; i++) {
-    for (size_t j = 0; j < nCol; j++) {
-      array[i][j] = 0;
-			for (size_t k = 0; k < tmpArray1NCol; k++) {
-				array[i][j] += array1->array[i][k] * array2->array[k][j];
+	Matrix MatrixM(this->nRow, array2.nCol);
+  for (size_t i = 0; i < this->nRow; i++) {
+    for (size_t j = 0; j < array2.nCol; j++) {
+      MatrixM.array[i][j] = 0;
+			for (size_t k = 0; k < this->nCol; k++) {
+				MatrixM.array[i][j] += this->array[i][k] * array2.array[k][j];
 			}
       #ifdef DEBUG
-      printf("%f\t", array[i][j]);
+      	printf("%f\t", MatrixM.array[i][j]);
       #endif
     }
     #ifdef DEBUG
     printf("\n");
     #endif
   }
+	return MatrixM;
+}
+
+Matrix Matrix::operator + (double scalar)
+{
+  #ifdef DEBUG
+  	printf("\nadd a scalar to a matrix :\n");
+  #endif
+	Matrix MatrixM(nRow, nCol);
+  for (size_t i = 0; i < nRow; i++) {
+    for (size_t j = 0; j < nCol; j++) {
+      MatrixM.array[i][j] = this->array[i][j] + scalar;
+      #ifdef DEBUG
+      	printf("%f\t", MatrixM.array[i][j]);
+      #endif
+    }
+    #ifdef DEBUG
+    	printf("\n");
+    #endif
+  }
+	return MatrixM;
+}
+
+
+Matrix Matrix::operator - (double scalar)
+{
+  #ifdef DEBUG
+  	printf("\nsubstract a scalar to a matrix :\n");
+  #endif
+	Matrix MatrixM(nRow, nCol);
+  for (size_t i = 0; i < nRow; i++) {
+    for (size_t j = 0; j < nCol; j++) {
+      MatrixM.array[i][j] = this->array[i][j] - scalar;
+      #ifdef DEBUG
+      	printf("%f\t", MatrixM.array[i][j]);
+      #endif
+    }
+    #ifdef DEBUG
+    	printf("\n");
+    #endif
+  }
+	return MatrixM;
+}
+
+
+Matrix Matrix::operator * (double scalar)
+{
+  #ifdef DEBUG
+  	printf("\nmultiply a scalar to a matrix :\n");
+  #endif
+	Matrix MatrixM(nRow, nCol);
+  for (size_t i = 0; i < nRow; i++) {
+    for (size_t j = 0; j < nCol; j++) {
+      MatrixM.array[i][j] = this->array[i][j] * scalar;
+      #ifdef DEBUG
+      	printf("%f\t", MatrixM.array[i][j]);
+      #endif
+    }
+    #ifdef DEBUG
+    	printf("\n");
+    #endif
+  }
+	return MatrixM;
 }

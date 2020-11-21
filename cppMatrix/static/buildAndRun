@@ -1,0 +1,22 @@
+#!/bin/bash
+
+cd src
+echo "build libs :"
+echo "make clean"
+make clean
+echo "make"
+make
+echo "make lib"
+make lib
+cd ../test
+echo ""
+echo "build test :"
+echo "make clean"
+make clean
+echo "make"
+make
+echo ""
+echo ""
+echo "run test :"
+./test
+echo "Done."

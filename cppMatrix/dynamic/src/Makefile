@@ -6,7 +6,7 @@
 #.PHONY: clean mrproper
 CC=g++
 CFLAGS= -Wall  -I../include -fPIC
-LDFLAGS= 
+LDFLAGS=
 SRC=$(wildcard *.cpp)
 OBJS= $(SRC:.cpp=.o)
 
@@ -14,11 +14,11 @@ all: $(OBJS)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c -o $@ $<
-	
+
 lib:
-	$(CC) -shared  -o ../lib/libmatrices.so $(OBJS)
-	
+	$(CC) -shared  -o ../lib/libmatrix.so $(OBJS)
+
 
 clean:
-	rm *.o 
-	rm ../lib/libmatrices.so
+	rm *.o
+	rm ../lib/libmatrix.so

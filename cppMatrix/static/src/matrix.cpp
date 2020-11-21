@@ -9,36 +9,57 @@ using namespace std;
 
 Matrix::Matrix(size_t rowNb, size_t colNb) : nRow(rowNb), nCol(colNb)
 {
-	//allocation dynamique d'un tableau de pointeurs de reels
-	array = (double **)new double*[nRow];
-
-	//initialisation a NULL des valeurs du tableau de pointeur
-	for (size_t i = 0; i < nRow; i++) {
-		array[i] = NULL;
-	}
-
-	//allocation dynamique d'un tableau de reels pour chaque
-	//element du tableau de pointeur *tab
-	for (size_t i = 0; i < nRow; i++) {
-		array[i] = (double *)new double[nCol];
-	}
+	allocateMemory();
 }
 
 /*********** DESTRUCTOR ***************/
 
 Matrix::~Matrix()
 {
-	for (size_t i = 0; i < nRow; i++) {
-		delete array[i];
-	}
-
-	delete array;
 	#ifdef DEBUG
-  	printf("Matrix : memory freed\n");
+  	printf("Matrix : Destructor called\n");
   #endif
+	freeMemory();
 }
 
 /*************** PRIVATE ***************/
+
+void Matrix::allocateMemory()
+{
+	//allocation dynamique d'un tableau de pointeurs de reels
+	//dynamic allocation of an array of real pointers
+	array = (double **)new double*[nRow];
+
+	//initialisation a NULL des valeurs du tableau de pointeurs
+	for (size_t i = 0; i < nRow; i++) {
+		array[i] = NULL;
+	}
+	//allocation dynamique d'un tableau de reels pour chaque
+	//element du tableau de pointeurs
+	for (size_t i = 0; i < nRow; i++) {
+		array[i] = (double *)new double[nCol];
+	}
+}
+
+void Matrix::freeMemory()
+{
+	if(preventMemoryFreeingState) { //check if memory must not to be freed
+		preventMemoryFreeingState = 0;
+		#ifdef DEBUG
+	  	printf("Matrix : memory not freed (avoid)\n");
+	  #endif
+	}
+	else { //free memory
+		for (size_t i = 0; i < nRow; i++) {
+			delete array[i];
+		}
+		delete array;
+		#ifdef DEBUG
+			printf("Matrix : memory freed\n");
+		#endif
+	}
+
+}
 
 double Matrix::pRandom(void)
 {
@@ -47,20 +68,19 @@ double Matrix::pRandom(void)
 
 /**************** PUBLIC ***************/
 
+void Matrix::preventMemoryFreeing()
+{
+  preventMemoryFreeingState = 1;
+}
+
 void Matrix::print()
 {
-  // #ifdef DEBUG
   printf("Print matrix :\n");
-  // #endif
   for (size_t i = 0; i < nRow; i++){
     for (size_t j = 0; j < nCol; j++){
-      // #ifdef DEBUG
       printf("%f\t", array[i][j]);
-      // #endif
     }
-    // #ifdef DEBUG
     printf("\n");
-    // #endif
   }
 }
 
@@ -217,4 +237,19 @@ Matrix Matrix::operator * (double scalar)
     #endif
   }
 	return MatrixM;
+}
+
+void Matrix::operator = (Matrix array2)
+{
+  #ifdef DEBUG
+  	printf("\nMatrix assignment...\n");
+  #endif
+	this->freeMemory();
+	this->nRow = array2.nRow;
+	this->nCol = array2.nCol;
+	this->array = array2.array;
+	array2.preventMemoryFreeing();
+	#ifdef DEBUG
+  	printf("Matrix assignment OK.\n");
+  #endif
 }

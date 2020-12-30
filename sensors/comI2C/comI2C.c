@@ -35,6 +35,14 @@ void setup() {
 	Serial.begin(9600);
 	Serial.println("Hello");
 	Wire.begin();
+
+	//Separate the humidity and the temperature readings.
+	//0x0000 for separation, 0x1000 to regroup.
+	Wire.beginTransmission(PmodHygroID);
+	Wire.write(RegConf);
+	Wire.write(0x00);
+	Wire.write(0x00);
+	Wire.endTransmission();
 }
 
 // Temperature formula given
@@ -52,25 +60,24 @@ float getHumidity(uint16_t humidity){
 	return percent;
 }
 
-void loop(){
+uint16_t getData(uint8_t reg){
 	Wire.beginTransmission(PmodHygroID);
-	Wire.write(RegTe);
-	Wire.write(RegTh);
+	Wire.write(reg);
 	Wire.endTransmission();
-
-	Wire.requestFrom(PmodHygroID, 4);
+	uint16_t data = 0;
+	Wire.requestFrom(PmodHygroID, 2);
 	if (Wire.available()){
-		temperature <<= 8;	//Shift left, MSB read first
-		temperature = (uint16_t) Wire.read(); //Wire.read() returns a byte, conversion to uint16_t
-		temperature <<= 8;	//Shift left, MSB read first
-		temperature |= (uint16_t) Wire.read();	//Addition with the 2nd byte received and converted to uint16_t
-
-
-		humidity <<= 8;
-		humidity = (uint16_t) Wire.read();
-		humidity <<= 8;
-		humidity |= (uint16_t)Wire.read();
+		data <<= 8;
+		data = (uint16_t) Wire.read();
+		data <<= 8;
+		data |= (uint16_t) Wire.read();
 	}
+	return data;
+}
+
+void loop(){
+	temperature = getData(RegTe);
+	humidity = getData(RegTh);
 
 	tempF = getTemp(temperature);
 	humF = getHumidity(humidity);

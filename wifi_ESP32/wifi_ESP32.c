@@ -25,9 +25,12 @@
 #include <WiFi.h>
 #include <Wire.h>
 #include <HTTPClient.h>
+
+//SSID and password of the access point are defined here
 #define SSID  "d206-IOT-AP"
 #define PASSPHRASE "d2062019uttSY23"
 
+//Temperature, humidity and configuration memory registers and sensorID are defined here
 #define RegTe 0x00
 #define RegTh 0x01
 #define RegConf 0x02
@@ -79,8 +82,8 @@ void ConnexionWifi(char *ssid, const char *passphrase) {
 void ConnexionHTTPGET(const char* url) {
   Serial.print("connexion URL: ");
   Serial.println(url);
-  http.begin(url);
-  int httpCode = http.GET();
+  http.begin(url);	//Start the request here
+  int httpCode = http.GET();	//Obtains the HTTP code after request, 200 means OK and everything else is bad.
   Serial.print("httpCode = ");
   Serial.println(httpCode);
     if (httpCode) {
@@ -137,7 +140,7 @@ uint16_t getData(uint8_t reg){
 	Wire.write(reg);
 	Wire.endTransmission();
 	uint16_t data = 0;
-	Wire.requestFrom(PmodHygroID, 2);
+	Wire.requestFrom(PmodHygroID, 2);	//Request 2 bytes from PmodHygro sensor
 	if (Wire.available()){
 		data <<= 8;
 		data = (uint16_t) Wire.read();  //Read received bytes, cast it into a uint16_t and stock in data
@@ -154,7 +157,7 @@ String composeRequest(){
   String paramTemp = "&temperature=";
   String paramHum = "&hygrometrie=";
 
-  float temp =  getTemp(getData(RegTe));   //Conversion to int hurts the precision....
+  float temp =  getTemp(getData(RegTe));   //Stock the temperature calculated from the 2 bytes sent by the sensor.
   float hum =  getHumidity(getData(RegTh));
 
   surl += paramTemp;
@@ -184,7 +187,7 @@ void setup() {
 
 void loop() {
   String surl = composeRequest();
-  const char* url = surl.c_str(); //String to const char* conversion
+  const char* url = surl.c_str(); //String to const char* conversion to fit the function
   ConnexionHTTPGET(url);
   delay(2000);
 }

@@ -9,7 +9,7 @@
 # echo "<h1>Welcome, ${REMOTE_ADDR}</h1>"
 
 # Path to the csv file
-FILE="data.csv"
+FILE="/home/uvs/Public/data/data.csv"
 if [ "$REQUEST_METHOD" == "GET" ]
  then
    CHAINE=$QUERY_STRING
@@ -22,17 +22,16 @@ LISTE=${CHAINE//&/ }
 # Write the header by appending all the fields, separated by comma.
 if [[ ! -f $FILE ]]
   then
-    echo "No data found. Creating new file" >> output.txt
-    cat > "$FILE"
+    echo "No data found. Creating new file" >> output.txt	#Creating a log file
+    cat > "$FILE"	#Itinializing the .csv file
     for param in $LISTE
       do
         champ=${param%=*}
-        echo -n "$champ, "
-        echo -n "$champ," >> "$FILE"
+        echo -n "$champ," >> "$FILE"	#Extract all the fields from the GET request to make the .csv header.
       done
-      echo -e "\n" >> "$FILE"
+      echo -e "\n" >> "$FILE"	#Newline 
 else
-  echo "FILE FOUND." >> output.txt
+  echo "FILE FOUND." >> output.txt	#Each time a request is received, the log file will register 1 file found.
 fi
 for param in $LISTE
   do
@@ -44,10 +43,11 @@ for param in $LISTE
     valeur=${valeur//+/ }
     # echo "<p>champ = $champ</br>"
     # echo "valeur = ${valeur}</br></p>"
-    # echo -n "$valeur, "
-    echo -n "$valeur, " >> $FILE
+
+    # Write the values parsed from GET request into the data.csv file 
+    echo -n "$valeur, " >> "$FILE"
   done
-  echo -e "\n" >> $FILE
+  echo -e "\n" >> "$FILE"
 # cat << EOF2
 # </body></html>
 # EOF2

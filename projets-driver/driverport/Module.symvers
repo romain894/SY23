@@ -1,0 +1,6 @@
+0x73f48ce0	gpio_export	/home/uvs/projets-sim-src/driver_class_gpio/driver_class_gpio	EXPORT_SYMBOL_GPL
+0x960661f4	gpio_get_value	/home/uvs/projets-sim-src/driver_class_gpio/driver_class_gpio	EXPORT_SYMBOL_GPL
+0xe61a6d2f	gpio_unexport	/home/uvs/projets-sim-src/driver_class_gpio/driver_class_gpio	EXPORT_SYMBOL_GPL
+0x65d6d0f0	gpio_direction_input	/home/uvs/projets-sim-src/driver_class_gpio/driver_class_gpio	EXPORT_SYMBOL_GPL
+0xc40f91c2	gpio_set_value	/home/uvs/projets-sim-src/driver_class_gpio/driver_class_gpio	EXPORT_SYMBOL_GPL
+0xa8f59416	gpio_direction_output	/home/uvs/projets-sim-src/driver_class_gpio/driver_class_gpio	EXPORT_SYMBOL_GPL

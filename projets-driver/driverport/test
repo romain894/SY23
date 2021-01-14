@@ -1,0 +1,6 @@
+make uninstall
+make 
+make install
+echo 45 > /dev/driverport
+cat /dev/driverport
+dmesg | tail

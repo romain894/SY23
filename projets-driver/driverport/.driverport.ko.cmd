@@ -1,0 +1,1 @@
+cmd_/home/uvs/driver_directory/driverport/driverport.ko := ld -r -m elf_x86_64 -T /usr/src/linux-headers-3.16.0-6-common/scripts/module-common.lds --build-id  -o /home/uvs/driver_directory/driverport/driverport.ko /home/uvs/driver_directory/driverport/driverport.o /home/uvs/driver_directory/driverport/driverport.mod.o

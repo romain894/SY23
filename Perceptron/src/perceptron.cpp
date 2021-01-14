@@ -22,7 +22,9 @@ w : la matrice contenant l'apprentissage
 
 Perceptron::Perceptron(const Matrix& p, const Matrix& za, float e)
 {
-
+	this->p = p;
+	this->za = za;
+	this->e = e;
 }
 
 /*********** DESTRUCTOR ***************/
@@ -37,6 +39,6 @@ Perceptron::~Perceptron()
 
 /**************** PUBLIC ***************/
 
-void Perceptron::test() {
-	printf("Coucou !\n");
+Matrix Perceptron::compute() {
+
 }

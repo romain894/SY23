@@ -68,6 +68,14 @@ double Matrix::pRandom(void)
 
 /**************** PUBLIC ***************/
 
+size_t Matrix::getNRow() {
+	return nRow;
+}
+
+size_t Matrix::getNCol() {
+	return nCol;
+}
+
 void Matrix::preventMemoryFreeing()
 {
   preventMemoryFreeingState = 1;

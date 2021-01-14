@@ -17,7 +17,7 @@ public:
   Perceptron(const Matrix& p, const Matrix& za, float e);
   ~Perceptron();
 
-  void test();
+  Matrix compute();
 
 };
 

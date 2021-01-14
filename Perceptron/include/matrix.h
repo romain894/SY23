@@ -2,7 +2,7 @@
 #define MATRIX_H
 
 //Romain THOMAS 2021
-//V 1.1
+//V 1.2
 
 #define DEBUG
 #define OPTIONNAL_CHECKS
@@ -23,6 +23,8 @@ public:
   double **array = NULL;
   size_t nRow; //do not use in your code
   size_t nCol; //do not use in your code
+  size_t getNRow();
+  size_t getNCol();
   void preventMemoryFreeing(); //do not use in your code
   void print();
   void generateRandomMatrix();

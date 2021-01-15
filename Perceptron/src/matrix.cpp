@@ -360,3 +360,53 @@ bool Matrix::operator >= (double scalar)
   }
 	return res;
 }
+
+Matrix Matrix::transpose()
+{
+	#ifdef DEBUG
+  	printf("\ntranspose a matrix:\n");
+  #endif
+	Matrix MatrixM(nCol, nRow); //reverse sizes to transpose
+  for (size_t i = 0; i < nRow; i++) {
+    for (size_t j = 0; j < nCol; j++) {
+      MatrixM.array[j][i] = this->array[i][j];
+      #ifdef DEBUG
+      	printf("%f\t", MatrixM.array[j][i]);
+      #endif
+    }
+    #ifdef DEBUG
+    	printf("\n");
+    #endif
+  }
+	return MatrixM;
+}
+
+Matrix Matrix::getCol(size_t col)
+{
+	#ifdef DEBUG
+  	printf("\nget the column of a matrix:\n");
+  #endif
+	Matrix MatrixM(nRow, 1);
+  for (size_t i = 0; i < nRow; i++) {
+    MatrixM.array[i][1] = this->array[i][col];
+    #ifdef DEBUG
+    	printf("%f\t", MatrixM.array[i][1]);
+    #endif
+  }
+	return MatrixM;
+}
+
+Matrix Matrix::getRow(size_t row)
+{
+	#ifdef DEBUG
+  	printf("\nget the row of a matrix:\n");
+  #endif
+	Matrix MatrixM(1, nCol);
+  for (size_t i = 0; i < nCol; i++) {
+    MatrixM.array[1][i] = this->array[row][i];
+    #ifdef DEBUG
+    	printf("%f\t", MatrixM.array[1][i]);
+    #endif
+  }
+	return MatrixM;
+}

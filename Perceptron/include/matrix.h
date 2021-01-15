@@ -2,7 +2,7 @@
 #define MATRIX_H
 
 //Romain THOMAS 2021
-//V 1.4
+//V 1.5
 
 #define DEBUG
 #define OPTIONNAL_CHECKS
@@ -42,6 +42,7 @@ public:
   bool operator >= (double var);
   bool operator <= (double var);
   Matrix transpose();
+  Matrix sign(); //get the sign
   Matrix getCol(size_t col);
   Matrix getRow(size_t row);
 };

@@ -381,6 +381,31 @@ Matrix Matrix::transpose()
 	return MatrixM;
 }
 
+Matrix Matrix::sign()
+{
+	#ifdef DEBUG
+  	printf("\nget the sign of each terms of a matrix:\n");
+  #endif
+	Matrix MatrixM(nRow, nCol);
+  for (size_t i = 0; i < nRow; i++) {
+    for (size_t j = 0; j < nCol; j++) {
+			if (this->array[i][j] >= 0) {
+				MatrixM.array[i][j] = 1;
+			}
+			else {
+				MatrixM.array[i][j] = -1;
+			}
+      #ifdef DEBUG
+      	printf("%f\t", MatrixM.array[i][j]);
+      #endif
+    }
+    #ifdef DEBUG
+    	printf("\n");
+    #endif
+  }
+	return MatrixM;
+}
+
 Matrix Matrix::getCol(size_t col)
 {
 	#ifdef DEBUG

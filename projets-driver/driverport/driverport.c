@@ -63,7 +63,7 @@ the value on port via standard console output.
 #define DEBUG
 
 static char buf_write[4];
-static char buf_read[8];
+static char buf_read[9];
 static unsigned int majeur,mineur;
 static bool direction;
 const int gpio_map[8] = {PI_KID_JC7, PI_KID_JC6, PI_KID_JC5, PI_KID_JC4, PI_KID_JC3, PI_KID_JC2, PI_KID_JC1, PI_KID_JC0};
@@ -92,7 +92,6 @@ static int driverport_release(struct inode *pinode,struct file *pfile) {
 static ssize_t driverport_write(struct file *pfile, const char *poctets, size_t nb,loff_t *pos) {
   int gpio_values[8];
   int convert_result = 0;
-  // char* endptr;
   int init_gpio_loop;
   int binary_exponent = 0;
   int return_code;
@@ -158,10 +157,6 @@ static ssize_t driverport_write(struct file *pfile, const char *poctets, size_t 
     printk(KERN_DEBUG"conversion failed, %d", convert_result );
   }
   #endif
-
-/* parameters: the buffer in kernel space, the bytes in userspace, the number of bytes to copy
-return: the number of bytes non copied (copy error)
-*/
   return nb;
 }
 
@@ -170,7 +165,6 @@ static ssize_t driverport_read(struct file *pfile, char *poctetqs, size_t nb,lof
   int read_gpio_loop;
   int return_code;
   int gpio_value;
-  size_t bytes_requested;
 
 #ifdef DEBUG
   printk(KERN_DEBUG"driverport[read] : demande %zu octets position %lld\n",nb,*pos);
@@ -180,25 +174,37 @@ static ssize_t driverport_read(struct file *pfile, char *poctetqs, size_t nb,lof
 // lecture sur les GPIOS
   for (read_gpio_loop = 7; read_gpio_loop >= 0; read_gpio_loop--){
     gpio_value = gpio_get_value(gpio_map[read_gpio_loop]);
-    buf_read[read_gpio_loop] = gpio_value;
-    printk(KERN_INFO"driverport[read] : gpio%d %d\n",gpio_map[read_gpio_loop], buf_read[read_gpio_loop] );
+    /*gpio_get_value returns an integer, cannot be stored in our 9 byte large char type buf_read.
+    Hence the simple char conversion. */
+    if (gpio_value == 1){
+      buf_read[read_gpio_loop] = '1';
+    }
+    else{
+      buf_read[read_gpio_loop] = '0';
+    }
+    #ifdef DEBUG
+    printk(KERN_INFO"driverport[read] : gpio%d %d\n",gpio_map[read_gpio_loop], gpio_value );
+    #endif
   }
-  //Check if there is still data to be read or not. If position goes past 0, return 0 for nothing left to read.
+  buf_read[8] = '\n'; //Newline for printing to terminal
+
+  /*Check if there is still data to be read or not. If position goes past 0, return 0 for nothing left to read.
+  The problem is that cat continously calls __read until it reaches EOF. If we never return 0 it keeps copying buf_read to userspace forever
+  */
+  //If __read has already been called, return 0 directly to signal cat that there's nothing more to read.
   if (*pos > sizeof(buf_read)){
     return 0; //EOF
   }
-  //Check if read has already been called. If number of bytes to return is
+  // If this is the first call to read, we bring the offset to the beginning of buf_read
   if (nb > sizeof(buf_read)){
-    nb = nb - sizeof(buf_read);
+    *pos = nb - sizeof(buf_read);
   }
   return_code = copy_to_user(poctetqs, buf_read,sizeof(buf_read));
   if (return_code != 0){
     printk(KERN_ERR"driverport[read] Error copying to userspace\n");
     return -EFAULT;
   }
-  printk(KERN_DEBUG"driverport[read] : Position %lld, %zu bytes\n",*pos, nb);
-  *pos += nb;
-  return sizeof(buf_read);
+  return nb;
 }
 
 
@@ -240,7 +246,6 @@ static int __init driverport_init(void) {
 
  for (init_gpio_loop = 0; init_gpio_loop < 8; init_gpio_loop++){
    retour = gpio_export(gpio_map[init_gpio_loop], 0);
-   printk(KERN_INFO"driverport[init] : gpio %d registered\n", retour);
  }
 
  if (direction){

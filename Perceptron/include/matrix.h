@@ -2,10 +2,10 @@
 #define MATRIX_H
 
 //Romain THOMAS 2021
-//V 1.5
+//V 1.6
 
-#define DEBUG
-#define OPTIONNAL_CHECKS
+//#define DEBUG
+//#define OPTIONNAL_CHECKS
 
 class Matrix
 {
@@ -39,13 +39,14 @@ public:
   bool operator < (double var);
   bool operator > (double var);
   bool operator == (double var);
+  bool operator != (double var);
   bool operator >= (double var);
   bool operator <= (double var);
   Matrix transpose();
   Matrix sign(); //get the sign
   Matrix getCol(size_t col);
   Matrix getRow(size_t row);
-  //Matrix resize(size_t rowNb, size_t colNb);
+  void resize(size_t rowNb, size_t colNb);
 };
 
 #endif //MATRIX_H

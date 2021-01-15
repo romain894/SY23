@@ -24,7 +24,7 @@ int main()
   size_t nRow = 2;
   size_t nCol = 4;
 
-  e = 0.01;
+  double e = 0.1;
 
   Matrix p(nRow, nCol);
   Matrix Za(nRow, nCol);
@@ -49,12 +49,16 @@ int main()
   Za[1][2] =  1;
   Za[1][3] =  1;
 
-  Perceptron percep(p, za, e);
+  printf("Enter Perceptron constructor\n");
+  Perceptron percep(p, Za, e);
+  printf("Exit Perceptron constructor\n");
 
+  printf("Enter Perceptron compute\n");
   Matrix Wres = percep.compute();
+  printf("Exit Perceptron compute\n");
 
+  printf("Wres = \n");
   Wres.print();
-
 
 
   //Matrix P();

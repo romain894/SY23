@@ -83,7 +83,7 @@ void Matrix::preventMemoryFreeing()
 
 void Matrix::print()
 {
-  printf("Print matrix :\n");
+  //printf("Print matrix :\n");
   for (size_t i = 0; i < nRow; i++){
     for (size_t j = 0; j < nCol; j++){
       printf("%f\t", array[i][j]);
@@ -252,7 +252,17 @@ void Matrix::operator = (Matrix array2)
   #ifdef DEBUG
   	printf("\nMatrix assignment...\n");
   #endif
-	this->freeMemory();
+	if (this->array != NULL) {
+		this->freeMemory();
+	}
+	else {
+		#ifdef DEBUG
+	  	printf("Memory not freed because this->array == NULL\n");
+			//it happens by affecting a Matrix that has been declared
+			//but not initialized. For example in a function which
+			//has an object declared in the .h file and never used
+	  #endif
+	}
 	this->nRow = array2.nRow;
 	this->nCol = array2.nCol;
 	this->array = array2.array;
@@ -278,10 +288,10 @@ bool Matrix::operator < (double scalar)
 				res = false;
 			}
     }
-    #ifdef DEBUG
-    	printf("Result : %d\n", res);
-    #endif
   }
+	//#ifdef DEBUG
+		printf("Result : %d\n", res);
+	//#endif
 	return res;
 }
 
@@ -297,10 +307,10 @@ bool Matrix::operator > (double scalar)
 				res = false;
 			}
     }
-    #ifdef DEBUG
-    	printf("Result : %d\n", res);
-    #endif
   }
+	#ifdef DEBUG
+		printf("Result : %d\n", res);
+	#endif
 	return res;
 }
 
@@ -316,10 +326,29 @@ bool Matrix::operator == (double scalar)
 				res = false;
 			}
     }
-    #ifdef DEBUG
-    	printf("Result : %d\n", res);
-    #endif
   }
+	#ifdef DEBUG
+		printf("Result : %d\n", res);
+	#endif
+	return res;
+}
+
+bool Matrix::operator != (double scalar)
+{
+  #ifdef DEBUG
+  	printf("\ntest if each element of a matrix is not to a scalar :\n");
+  #endif
+	bool res = true;
+  for (size_t i = 0; i < nRow; i++) {
+    for (size_t j = 0; j < nCol; j++) {
+			if (this->array[i][j] == scalar) {
+				res = false;
+			}
+    }
+  }
+	#ifdef DEBUG
+		printf("Result : %d\n", res);
+	#endif
 	return res;
 }
 
@@ -335,10 +364,10 @@ bool Matrix::operator <= (double scalar)
 				res = false;
 			}
     }
-    #ifdef DEBUG
-    	printf("Result : %d\n", res);
-    #endif
   }
+	#ifdef DEBUG
+		printf("Result : %d\n", res);
+	#endif
 	return res;
 }
 
@@ -354,10 +383,10 @@ bool Matrix::operator >= (double scalar)
 				res = false;
 			}
     }
-    #ifdef DEBUG
-    	printf("Result : %d\n", res);
-    #endif
   }
+	#ifdef DEBUG
+		printf("Result : %d\n", res);
+	#endif
 	return res;
 }
 
@@ -370,14 +399,11 @@ Matrix Matrix::transpose()
   for (size_t i = 0; i < nRow; i++) {
     for (size_t j = 0; j < nCol; j++) {
       MatrixM.array[j][i] = this->array[i][j];
-      #ifdef DEBUG
-      	printf("%f\t", MatrixM.array[j][i]);
-      #endif
     }
-    #ifdef DEBUG
-    	printf("\n");
-    #endif
   }
+	#ifdef DEBUG
+		MatrixM.print();
+	#endif
 	return MatrixM;
 }
 
@@ -413,9 +439,9 @@ Matrix Matrix::getCol(size_t col)
   #endif
 	Matrix MatrixM(nRow, 1);
   for (size_t i = 0; i < nRow; i++) {
-    MatrixM.array[i][1] = this->array[i][col];
+    MatrixM.array[i][0] = this->array[i][col];
     #ifdef DEBUG
-    	printf("%f\t", MatrixM.array[i][1]);
+    	printf("%f\n", MatrixM.array[i][0]);
     #endif
   }
 	return MatrixM;
@@ -428,10 +454,50 @@ Matrix Matrix::getRow(size_t row)
   #endif
 	Matrix MatrixM(1, nCol);
   for (size_t i = 0; i < nCol; i++) {
-    MatrixM.array[1][i] = this->array[row][i];
+    MatrixM.array[0][i] = this->array[row][i];
     #ifdef DEBUG
-    	printf("%f\t", MatrixM.array[1][i]);
+    	printf("%f\t", MatrixM.array[0][i]);
     #endif
   }
 	return MatrixM;
+}
+
+void Matrix::resize(size_t rowNb, size_t colNb)
+{
+	#ifdef DEBUG
+  	printf("\nresize a matrix:\n");
+  #endif
+	//create a new temporary matrix with the new size
+	Matrix MatrixM(rowNb, colNb);
+
+	//affect the old values to the new matrix and 0 to the new cells
+	for (size_t i = 0; i < rowNb; i++) {
+    for (size_t j = 0; j < colNb; j++) {
+			if ((i < this->nRow) && (j < this->nCol)) {
+				MatrixM.array[i][j] = this->array[i][j];
+			}
+			else {
+				MatrixM.array[i][j] = 0;
+			}
+      #ifdef DEBUG
+      	printf("%f\t", MatrixM.array[i][j]);
+      #endif
+    }
+		#ifdef DEBUG
+    	printf("\n");
+    #endif
+	}
+
+	#ifdef DEBUG
+  	printf("\nMatrix assignment for resizing...\n");
+  #endif
+	this->freeMemory();
+	this->nRow = rowNb;
+	this->nCol = colNb;
+	this->array = MatrixM.array;
+	MatrixM.preventMemoryFreeing();
+	#ifdef DEBUG
+  	printf("Matrix assignment for resizing OK.\n");
+  #endif
+
 }

@@ -1,20 +1,23 @@
 #ifndef PERCEPTRON_H
 #define PERCEPTRON_H
 
+//Romain THOMAS 2021
+//V1.0
+
 #include "matrix.h"
 
 #define DEBUG
-#define OPTIONNAL_CHECKS
+//#define OPTIONNAL_CHECKS
 
 class Perceptron
 {
 private:
   Matrix p;
   Matrix za;
-  float e;
+  double e;
 
 public:
-  Perceptron(Matrix p, Matrix za, float e);
+  Perceptron(Matrix p, Matrix za, double e);
   ~Perceptron();
 
   Matrix compute();

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+#extracting objects from matrix lib in
+cd lib
+#mkdir extractedLibs -p
+#cd extractedLibs
+#ar xv ../lmatrix.a
+ar xv lmatrix.a
+#cp matrix.o ../../src/matrix.o

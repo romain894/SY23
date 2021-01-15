@@ -5,22 +5,12 @@
 
 using namespace std;
 
-/*
-entree :
-p : entre
-za : sortie attendue
-e : taux d'apprentissage
-sortie :
-w : la matrice contenant l'apprentissage
-*/
-
 /*********** CONSTRUCTOR **************/
 
 Perceptron::Perceptron(Matrix p, Matrix za, double e)
 {
-	printf("123 !!!\n");
+	//assign local variables from constructor to the object own variables
 	this->p = p;
-	printf("456 !!!\n");
 	this->za = za;
 	this->e = e;
 	#ifdef OPTIONNAL_CHECKS
@@ -34,6 +24,8 @@ Perceptron::Perceptron(Matrix p, Matrix za, double e)
 		}
   #endif
 
+	//we must not destroy p and za matrix else there memory will be freed and we
+	//will no longer be able to use them again
 	p.preventMemoryFreeing();
 	za.preventMemoryFreeing();
 }
@@ -42,8 +34,9 @@ Perceptron::Perceptron(Matrix p, Matrix za, double e)
 
 Perceptron::~Perceptron()
 {
-	//theses matrix will be already freed at the end of the main program where
-	//they have been declared
+	//p and za matrix will be already freed at the end of the main program where
+	//they have been declared, so we must not destroy these object else they will
+	//be destroyed twice
 	p.preventMemoryFreeing();
 	za.preventMemoryFreeing();
 }
@@ -53,55 +46,28 @@ Perceptron::~Perceptron()
 
 /**************** PUBLIC ***************/
 
-	Matrix Perceptron::compute() {
-	size_t nRowP = p.getNRow();
-	size_t nColP = p.getNCol();
-	size_t nRowZa = za.getNRow();
-	// size_t nColZa = za.getNCol(); always equal to nColP
+Matrix Perceptron::compute() {
+	size_t nRowP = p.getNRow(); //Number of rows of p array
+	size_t nColP = p.getNCol(); //Number of columns of p array, always equal to nColP
+	size_t nRowZa = za.getNRow(); //Number of row of za array
 
-	Matrix dW(nRowP + 1, nRowZa);
-	Matrix W(nRowP + 1, nRowZa);
-	W.generateRandomMatrix();
+	Matrix dW(nRowP + 1, nRowZa); //create a new dW array for learning
+	Matrix W(nRowP + 1, nRowZa); //create a new W array for storing the learning result
+	W.generateRandomMatrix(); //set each value of W to a random one between 0 and 1
 
-	bool dWnotEqualToZero;
-
+	//Perceptron learning algorithme (Rosemblatt) :
+	bool dWnotEqualToZero; //used to know if we need to start again the do while loop
+	//set to false if each value of dW is equal to 0
 	do {
-		#ifdef DEBUG
-			printf("\n\n");
-		#endif
 		dWnotEqualToZero = false;
 		for (size_t i = 0; i < nColP; i++) {
-			#ifdef DEBUG
-				printf("get the column i of p :\n");
-			#endif
 			Matrix Pi = p.getCol(i); //get the column i of p
-			#ifdef DEBUG
-				printf("add an element a the end of the column and affect it 1\n");
-			#endif
 			Pi.resize(Pi.getNRow() + 1, 1); //add an element a the end of the column
-			#ifdef DEBUG
-				printf("affect 1 to the last element\n");
-			#endif
-			Pi[Pi.getNRow()-1][0] = 1;//affect 1 to the last element
-			#ifdef DEBUG
-				printf("finish compute :\n");
-			#endif
-			printf("***************************************************\n");
-			printf("W.transpose() =\n");
-			W.transpose().print();
-			printf("Pi =\n");
-			Pi.print();
-			printf("***************************************************\n");
-			Matrix Yi = W.transpose()*Pi;
-			printf("Yi =\n");
-			Yi.print();
-			Matrix Zi = Yi.sign();
-			printf("Za =\n");
-			za.getCol(i).print();
-			printf("Zi =\n");
-			Zi.print();
-			Matrix Error = za.getCol(i) - Zi;
-			dW = Pi*Error.transpose()*e;
+			Pi[Pi.getNRow()-1][0] = 1; //affect 1 to the last element
+			Matrix Yi = W.transpose()*Pi; //Yi = W^T * P_i
+			Matrix Zi = Yi.sign(); //Zi = sign(Y_i)
+			Matrix Error = za.getCol(i) - Zi; //Error = Z_a_i - Z_i
+			dW = Pi*Error.transpose()*e; //dW = e*P_i*Error^T
 			W = W + dW;
 			#ifdef DEBUG
 				printf("dW = \n");
@@ -109,22 +75,12 @@ Perceptron::~Perceptron()
 				printf("W = \n");
 				W.print();
 			#endif
-			if (dW == 0) {
-				#ifdef DEBUG
-					printf("dW == 0\n");
-				#endif
-			}
-			else {
-				dWnotEqualToZero = true;
-				#ifdef DEBUG
-					printf("dW != 0\n");
-				#endif
+			if (!(dW == 0)) { //at least one dW in n is not equal to 0
+				dWnotEqualToZero = true; //set to true to start again the do while loop
 			}
 		}
-
-		//exit (EXIT_FAILURE); //stop the programm
 	}
-	while (dWnotEqualToZero);
+	while (dWnotEqualToZero);  //is dW == 0 we exit this do while loop
 
 	return W;
 }

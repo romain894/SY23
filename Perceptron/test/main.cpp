@@ -29,6 +29,7 @@ int main()
   Matrix p(nRow, nCol);
   Matrix Za(nRow, nCol);
 
+  //test arrays for logic "and" and "or" operators
   p[0][0] = -1;
   p[0][1] = -1;
   p[0][2] =  1;
@@ -49,13 +50,11 @@ int main()
   Za[1][2] =  1;
   Za[1][3] =  1;
 
-  printf("Enter Perceptron constructor\n");
+  //create a Perceptron object with the parameters defined above
   Perceptron percep(p, Za, e);
-  printf("Exit Perceptron constructor\n");
 
-  printf("Enter Perceptron compute\n");
+  //compute the neural network and saves it in Wres
   Matrix Wres = percep.compute();
-  printf("Exit Perceptron compute\n");
 
   printf("Wres = \n");
   Wres.print();

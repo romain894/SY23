@@ -322,7 +322,8 @@ bool Matrix::operator == (double scalar)
 	bool res = true;
   for (size_t i = 0; i < nRow; i++) {
     for (size_t j = 0; j < nCol; j++) {
-			if (this->array[i][j] != scalar) {
+			if (this->array[i][j] != scalar) { //one element is not equal to the
+				//scalar, the return value will be false
 				res = false;
 			}
     }
@@ -412,13 +413,15 @@ Matrix Matrix::sign()
 	#ifdef DEBUG
   	printf("\nget the sign of each terms of a matrix:\n");
   #endif
-	Matrix MatrixM(nRow, nCol);
+	Matrix MatrixM(nRow, nCol); //matrix which will be returned
   for (size_t i = 0; i < nRow; i++) {
     for (size_t j = 0; j < nCol; j++) {
 			if (this->array[i][j] >= 0) {
+				//positive element : store 1 in MatrixM
 				MatrixM.array[i][j] = 1;
 			}
 			else {
+				//neagtive element : store -1 in MatrixM
 				MatrixM.array[i][j] = -1;
 			}
       #ifdef DEBUG
@@ -470,13 +473,16 @@ void Matrix::resize(size_t rowNb, size_t colNb)
 	//create a new temporary matrix with the new size
 	Matrix MatrixM(rowNb, colNb);
 
-	//affect the old values to the new matrix and 0 to the new cells
+	//affect the values of the old matrix to the new matrix and 0 to the new cells
 	for (size_t i = 0; i < rowNb; i++) {
     for (size_t j = 0; j < colNb; j++) {
 			if ((i < this->nRow) && (j < this->nCol)) {
+				//affect the value of the old matrix
 				MatrixM.array[i][j] = this->array[i][j];
 			}
 			else {
+				//affect 0 because no cell was present at this position in the old
+				//matrix
 				MatrixM.array[i][j] = 0;
 			}
       #ifdef DEBUG
@@ -491,10 +497,16 @@ void Matrix::resize(size_t rowNb, size_t colNb)
 	#ifdef DEBUG
   	printf("\nMatrix assignment for resizing...\n");
   #endif
+	//affect the created matrix to this object and free the memory of the old
+	//array
 	this->freeMemory();
+	//update the rows and columns number
 	this->nRow = rowNb;
 	this->nCol = colNb;
+	//update the pointer of the array to the newly created array
 	this->array = MatrixM.array;
+	//avoid freeing the memory of the array of MatrixM because it now contains the
+	//array of this object
 	MatrixM.preventMemoryFreeing();
 	#ifdef DEBUG
   	printf("Matrix assignment for resizing OK.\n");

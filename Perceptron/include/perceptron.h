@@ -14,7 +14,7 @@ private:
   float e;
 
 public:
-  Perceptron(const Matrix& p, const Matrix& za, float e);
+  Perceptron(Matrix p, Matrix za, float e);
   ~Perceptron();
 
   Matrix compute();

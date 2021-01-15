@@ -45,6 +45,7 @@ public:
   Matrix sign(); //get the sign
   Matrix getCol(size_t col);
   Matrix getRow(size_t row);
+  //Matrix resize(size_t rowNb, size_t colNb);
 };
 
 #endif //MATRIX_H

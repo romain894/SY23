@@ -2,7 +2,7 @@
 #define MATRIX_H
 
 //Romain THOMAS 2021
-//V 1.2
+//V 1.3
 
 #define DEBUG
 #define OPTIONNAL_CHECKS
@@ -36,6 +36,11 @@ public:
   Matrix operator * (double scalar);
   void operator = (Matrix array2);
   double * operator [](int id);
+  bool operator < (double var);
+  bool operator > (double var);
+  bool operator == (double var);
+  bool operator >= (double var);
+  bool operator <= (double var);
 };
 
 #endif //MATRIX_H

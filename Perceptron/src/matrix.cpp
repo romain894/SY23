@@ -265,3 +265,98 @@ void Matrix::operator = (Matrix array2)
 double * Matrix::operator [](int id) {
 	return this->array[id];
 }
+
+bool Matrix::operator < (double scalar)
+{
+  #ifdef DEBUG
+  	printf("\ntest if a matrix is less than a scalar :\n");
+  #endif
+	bool res = true;
+  for (size_t i = 0; i < nRow; i++) {
+    for (size_t j = 0; j < nCol; j++) {
+			if (this->array[i][j] >= scalar) {
+				res = false;
+			}
+    }
+    #ifdef DEBUG
+    	printf("Result : %d\n", res);
+    #endif
+  }
+	return res;
+}
+
+bool Matrix::operator > (double scalar)
+{
+  #ifdef DEBUG
+  	printf("\ntest if a matrix is greater than a scalar :\n");
+  #endif
+	bool res = true;
+  for (size_t i = 0; i < nRow; i++) {
+    for (size_t j = 0; j < nCol; j++) {
+			if (this->array[i][j] <= scalar) {
+				res = false;
+			}
+    }
+    #ifdef DEBUG
+    	printf("Result : %d\n", res);
+    #endif
+  }
+	return res;
+}
+
+bool Matrix::operator == (double scalar)
+{
+  #ifdef DEBUG
+  	printf("\ntest if a matrix is equal to a scalar :\n");
+  #endif
+	bool res = true;
+  for (size_t i = 0; i < nRow; i++) {
+    for (size_t j = 0; j < nCol; j++) {
+			if (this->array[i][j] != scalar) {
+				res = false;
+			}
+    }
+    #ifdef DEBUG
+    	printf("Result : %d\n", res);
+    #endif
+  }
+	return res;
+}
+
+bool Matrix::operator <= (double scalar)
+{
+  #ifdef DEBUG
+  	printf("\ntest if a matrix is less than or equal to a scalar :\n");
+  #endif
+	bool res = true;
+  for (size_t i = 0; i < nRow; i++) {
+    for (size_t j = 0; j < nCol; j++) {
+			if (this->array[i][j] > scalar) {
+				res = false;
+			}
+    }
+    #ifdef DEBUG
+    	printf("Result : %d\n", res);
+    #endif
+  }
+	return res;
+}
+
+bool Matrix::operator >= (double scalar)
+{
+  #ifdef DEBUG
+  	printf("\ntest if a matrix is greater than or equal to a scalar :\n");
+  #endif
+	bool res = true;
+  for (size_t i = 0; i < nRow; i++) {
+    for (size_t j = 0; j < nCol; j++) {
+			if (this->array[i][j] < scalar) {
+				res = false;
+			}
+    }
+    #ifdef DEBUG
+    	printf("Result : %d\n", res);
+    #endif
+  }
+	return res;
+}

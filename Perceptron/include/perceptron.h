@@ -2,7 +2,7 @@
 #define PERCEPTRON_H
 
 //Romain THOMAS 2021
-//V1.0.1
+//V1.0.2
 
 #include "matrix.h"
 

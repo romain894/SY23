@@ -48,16 +48,19 @@ Perceptron::~Perceptron()
 
 Matrix Perceptron::compute() {
 	size_t nRowP = p.getNRow(); //Number of rows of p array
-	size_t nColP = p.getNCol(); //Number of columns of p array, always equal to nColP
+	size_t nColP = p.getNCol(); //Number of columns of p array, always equal to
+	//nColP
 	size_t nRowZa = za.getNRow(); //Number of row of za array
 
 	Matrix dW(nRowP + 1, nRowZa); //create a new dW array for learning
-	Matrix W(nRowP + 1, nRowZa); //create a new W array for storing the learning result
-	W.generateRandomMatrix(); //set each value of W to a random one between 0 and 1
+	Matrix W(nRowP + 1, nRowZa); //create a new W array for storing the learning
+	//result
+	W.generateRandomMatrix(); //set each value of W to a random one between 0 and
+	//1
 
 	//Perceptron learning algorithme (Rosemblatt) :
-	bool dWnotEqualToZero; //used to know if we need to start again the do while loop
-	//set to false if each value of dW is equal to 0
+	bool dWnotEqualToZero; //used to know if we need to start again the do while
+	//loop. Set to false if each value of dW is equal to 0
 	do {
 		dWnotEqualToZero = false;
 		for (size_t i = 0; i < nColP; i++) {
